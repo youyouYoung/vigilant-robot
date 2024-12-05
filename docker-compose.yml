@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: shop_db
+      POSTGRES_USER: shop_user
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"  # 映射 Django 的默认端口
+    volumes:
+      - ./src:/app  # Mount only the src folder
+      - ./wait-for-it.sh:/app/wait-for-it.sh  # Mount the wait-for-it.sh script
+    depends_on:
+      - db
+    command: >
+      sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
