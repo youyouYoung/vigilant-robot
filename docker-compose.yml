@@ -19,6 +19,8 @@ services:
       - ./wait-for-it.sh:/app/wait-for-it.sh  # Mount the wait-for-it.sh script
     depends_on:
       - db
+    environment:
+      PYTHONUNBUFFERED: "1"
     command: >
       sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
       python manage.py migrate &&
