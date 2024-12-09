@@ -9,6 +9,8 @@ services:
       POSTGRES_PASSWORD: password123
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   web:
     build: .
@@ -25,3 +27,6 @@ services:
       sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  postgres_data:
