@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     environment:
-      PYTHONUNBUFFERED: "1"
+      DB_HOST: db
     command: >
       sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
       python manage.py migrate &&
