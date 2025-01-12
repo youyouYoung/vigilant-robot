@@ -24,7 +24,9 @@ def custom_exception_handler(exc, context):
     if isinstance(exc, ValidationError):
         return JsonResponse({
             "error": "Validation Error",
-            "message": str(exc.detail) if hasattr(exc, 'detail') else str(exc)
+            "message": exc.default_detail,
+            "details": {field: error_list[0] if error_list else "Unknown error"
+                               for field, error_list in exc.detail.items()} if hasattr(exc, 'detail') else {}
         }, status=response.status_code)
 
     # For other errors, follow the same structure
