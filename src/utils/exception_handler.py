@@ -16,8 +16,8 @@ def custom_exception_handler(exc, context):
     # Handle AuthenticationFailed exceptions
     if isinstance(exc, AuthenticationFailed):
         return JsonResponse({
-            "error": "Authentication Error",
-            "message": str(exc)
+            "error": exc.default_code,
+            "message": exc.default_detail,
         }, status=response.status_code)
 
     # Handle ValidationError exceptions
