@@ -7,8 +7,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    env_file:
-      - .env.docker
     ports:
       - "5432:5432"
     volumes:
@@ -28,9 +26,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=${DB_HOST}
-      - DJANGO_ALLOWED_HOSTS={DJANGO_ALLOWED_HOSTS}
-    env_file:
-      - .env.docker
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
     command: >
       sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
       python manage.py migrate &&
