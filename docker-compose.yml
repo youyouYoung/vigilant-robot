@@ -19,6 +19,7 @@ services:
     volumes:
       - ./src:/app  # Mount only the src folder
       - ./wait-for-it.sh:/app/wait-for-it.sh  # Mount the wait-for-it.sh script
+      - ${MEDIA_ROOT}:/media
     depends_on:
       - db
     environment:
@@ -29,7 +30,7 @@ services:
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
     command: >
-      sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
+      sh -c "/app/wait-for-it.sh db:5432 -- ${MAKE_MIGRATIONS} 
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
 
