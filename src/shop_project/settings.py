@@ -151,3 +151,9 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Example: 5 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Example: 7 days
 }
+
+# media
+MEDIA_ROOT = os.path.join('/media', 'django')
+# 媒体文件的访问路径
+MEDIA_URL = '/media/'
+

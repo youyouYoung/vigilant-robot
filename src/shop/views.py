@@ -1,7 +1,20 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Product, Order
-from .serializers import ProductSerializer, OrderSerializer
+from .models import Product, Order, Category
+from .serializers import ProductSerializer, OrderSerializer, CategorySerializer
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    A viewset that provides the standard actions for the Category model.
+    """
+    permission_classes = [AllowAny]
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    # # Optionally, you can customize the queryset or add filtering here
+    # def get_queryset(self):
+    #     # For example, filter only active categories
+    #     return Category.objects.filter(is_active=True)
 
 class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
