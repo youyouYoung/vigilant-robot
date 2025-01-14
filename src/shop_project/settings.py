@@ -157,3 +157,25 @@ MEDIA_ROOT = os.path.join('/media', 'django')
 # 媒体文件的访问路径
 MEDIA_URL = '/media/'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # Adjust this level as needed (e.g., INFO, WARNING, ERROR)
+            'propagate': True,
+        },
+        'shop': {  # Replace with your app's name if using a custom logger
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
