@@ -1,6 +1,10 @@
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from django.http import JsonResponse
+import logging
+
+# Configure a logger for error handling
+logger = logging.getLogger(__name__)
 
 def custom_exception_handler(exc, context):
     # Call DRF's default exception handler first
@@ -8,6 +12,9 @@ def custom_exception_handler(exc, context):
 
     # If response is None, handle it as a server error
     if response is None:
+        # Log the error
+        logger.error(f"Error: {str(exc)}, Context: {str(context)}")
+
         return JsonResponse({
             "error": "Server Error",
             "message": "Something went wrong on our end"
