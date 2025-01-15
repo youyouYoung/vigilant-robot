@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Product, Order, Category
-from .serializers import ProductSerializer, OrderSerializer, CategorySerializer
+from .models import Product, Order, Category, ProductImage
+from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, ProductImageSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -20,6 +20,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class ProductImageViewSet(viewsets.ModelViewSet):
+    """
+    商品图片View
+    """
+    permission_classes = [AllowAny]
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]

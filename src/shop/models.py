@@ -103,6 +103,7 @@ class ProductImage(models.Model):
     filename = models.CharField(max_length=150)
     image = models.ImageField(upload_to=get_image_upload_to)
     is_primary = models.BooleanField(default=False)  # 是否为主图
+    # todo add field alt_text
 
     def __str__(self):
         return f"Image for {self.product.name}"

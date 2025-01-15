@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -153,7 +154,7 @@ SIMPLE_JWT = {
 }
 
 # media
-MEDIA_ROOT = os.path.join('/media', 'django')
+MEDIA_ROOT = os.path.join(config('MEDIA_ROOT', '/media'), 'django')
 # 媒体文件的访问路径
 MEDIA_URL = '/media/'
 
@@ -169,12 +170,12 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',  # Adjust this level as needed (e.g., INFO, WARNING, ERROR)
+            'level': 'WARNING',  # Adjust this level as needed (e.g., INFO, WARNING, ERROR)
             'propagate': True,
         },
         'shop': {  # Replace with your app's name if using a custom logger
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'propagate': True,
         },
     },
