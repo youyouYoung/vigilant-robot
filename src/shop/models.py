@@ -3,10 +3,14 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 
 def get_image_upload_to(instance, filename):
-    return f'{instance.__class__.__name__.lower()}/images/{instance.id}/{filename}'
+    class_name = instance.__class__.__name__ if not isinstance(instance, ProductImage) else Product.__name__
+    instance_id = instance.id if not isinstance(instance, ProductImage) else instance.product.id
+    return f'{class_name}/images/{instance_id}/{filename}'
 
 def get_icon_upload_to(instance, filename):
-    return f'{instance.__class__.__name__.lower()}/icons/{instance.id}/{filename}'
+    class_name = instance.__class__.__name__ if not isinstance(instance, ProductImage) else Product.__name__
+    instance_id = instance.id if not isinstance(instance, ProductImage) else instance.product.id
+    return f'{class_name}/icons/{instance_id}/{filename}'
 
 class Category(models.Model):
     """
