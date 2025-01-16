@@ -38,7 +38,7 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField()
     size = models.CharField(max_length=150, null=True, blank=True)
     color = models.CharField(max_length=150, null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True) # todo could have a couple weight based on size
     material = models.CharField(max_length=150, null=True, blank=True)
     seo_title = models.CharField(max_length=255, null=True, blank=True)
     seo_description = models.CharField(max_length=255, null=True, blank=True)

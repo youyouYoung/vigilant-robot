@@ -18,6 +18,19 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+    def create(self, validated_data):
+        # create product object
+        product = Product.objects.create(**validated_data)
+
+        if 'images' in validated_data:
+            # get images data
+            images_data = validated_data.pop('images')
+            # create product image objects for the product
+            for image in images_data:
+                ProductImage.objects.create(product=product, **image)
+
+        return product
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order

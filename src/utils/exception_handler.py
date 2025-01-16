@@ -2,6 +2,7 @@ from rest_framework.views import exception_handler
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from django.http import JsonResponse
 import logging
+import traceback
 
 # Configure a logger for error handling
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ def custom_exception_handler(exc, context):
     # If response is None, handle it as a server error
     if response is None:
         # Log the error
-        logger.error(f"Error: {str(exc)}, Context: {str(context)}")
+        logger.error(f"Exception Handler - Error: {str(exc)}, Context: {str(context)}, An exception occurred:\n{traceback.format_exc()}")
 
         return JsonResponse({
             "error": "Server Error",
