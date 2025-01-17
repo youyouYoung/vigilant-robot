@@ -10,24 +10,24 @@ class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = '__all__'
+        # fields = ['filename', 'image', 'is_primary']
         # fields = ['id', 'image', 'alt_text']
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ProductImageSerializer(many=True, read_only=True)
+    images = ProductImageSerializer(many=True)
     class Meta:
         model = Product
         fields = '__all__'
 
     def create(self, validated_data):
+        # get images data
+        images_data = validated_data.pop('images', [])
         # create product object
         product = Product.objects.create(**validated_data)
 
-        if 'images' in validated_data:
-            # get images data
-            images_data = validated_data.pop('images')
-            # create product image objects for the product
-            for image in images_data:
-                ProductImage.objects.create(product=product, **image)
+        # create product image objects for the product
+        for image in images_data:
+            ProductImage.objects.create(product=product, **image)
 
         return product
 
