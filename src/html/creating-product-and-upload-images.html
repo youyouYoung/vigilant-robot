@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload Form</title>
+</head>
+<body>
+    <h1>Simple Form with Images Array</h1>
+    <form action="http://localhost:8000/api/products/" method="POST" enctype="multipart/form-data">
+        <!-- Regular Text Inputs -->
+        <label for="name">name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+
+        <label for="description">description:</label>
+        <input type="text" id="description" name="description" required>
+        <br><br>
+
+        <label for="category">category:</label>
+        <input type="text" id="category" name="category" required>
+        <br><br>
+
+        <label for="current_price">current_price:</label>
+        <input type="text" id="current_price" name="current_price" required>
+        <br><br>
+
+        <label for="stock_quantity">category:</label>
+        <input type="text" id="stock_quantity" name="stock_quantity" required>
+        <br><br>
+
+        <!-- Images Array -->
+        <h3>Images:</h3>
+
+        <!-- First Image -->
+        <label for="images[0]filename">Image 1 Filename:</label>
+        <input type="text" id="images[0]filename" name="images[0]filename" required>
+        <br>
+        <label for="images[0]image">Image 1 File:</label>
+        <input type="file" id="images[0]image" name="images[0]image" accept="image/*" required>
+        <br><br>
+
+        <!-- Second Image -->
+<!--   **不能使用images[1].filename, 需要images[1]filename才能成功**   -->
+        <label for="images[1]filename">Image 2 Filename:</label>
+        <input type="text" id="images[1]filename" name="images[1]filename" required>
+        <br>
+        <label for="images[1]image">Image 2 File:</label>
+        <input type="file" id="images[1]image" name="images[1]image" accept="image/*" required>
+        <br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
