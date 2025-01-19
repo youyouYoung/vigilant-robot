@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet, OrderViewSet, CategoryViewSet, ProductImageViewSet
+from .views import ProductViewSet, OrderViewSet, CategoryViewSet, ProductImageViewSet, ProductPriceHistoryView
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
@@ -10,4 +10,5 @@ router.register(r'orders', OrderViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/products/<int:product_id>/price-history/', ProductPriceHistoryView.as_view(), name='price-history'),
 ]

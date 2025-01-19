@@ -4,14 +4,28 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 
 def get_image_upload_to(instance, filename):
-    class_name = instance.__class__.__name__ if not isinstance(instance, ProductImage) else Product.__name__
-    instance_id = instance.id if not isinstance(instance, ProductImage) else instance.product.id
-    return f'{class_name}/images/{instance_id}/{filename}'
+    if isinstance(instance, ProductImage):
+        type_name = Product.__name__
+        instance_name = instance.product.id
+    elif isinstance(instance, Category):
+        type_name = instance.__class__.__name__
+        instance_name = instance.name
+    else:
+        type_name = instance.__class__.__name__
+        instance_name = None
+    return f'{type_name}/images/{instance_name}/{filename}'
 
 def get_icon_upload_to(instance, filename):
-    class_name = instance.__class__.__name__ if not isinstance(instance, ProductImage) else Product.__name__
-    instance_id = instance.id if not isinstance(instance, ProductImage) else instance.product.id
-    return f'{class_name}/icons/{instance_id}/{filename}'
+    if isinstance(instance, ProductImage):
+        type_name = Product.__name__
+        instance_name = instance.product.id
+    elif isinstance(instance, Category):
+        type_name = instance.__class__.__name__
+        instance_name = instance.name
+    else:
+        type_name = instance.__class__.__name__
+        instance_name = None
+    return f'{type_name}/icons/{instance_name}/{filename}'
 
 class Category(models.Model):
     """
@@ -67,7 +81,7 @@ class ProductPriceHistory(models.Model):
     """
     价格历史表
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="price_histories")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True, blank=True) # todo: update it until we have a new price
@@ -108,7 +122,7 @@ class ProductImage(models.Model):
     filename = models.CharField(max_length=150)
     image = models.ImageField(upload_to=get_image_upload_to)
     is_primary = models.BooleanField(default=False)  # 是否为主图
-    # todo add field alt_text
+    # todo add fields alt_text, is_activate
 
     def __str__(self):
         return f"Image for {self.product.name}"

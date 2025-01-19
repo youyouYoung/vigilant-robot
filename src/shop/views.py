@@ -1,7 +1,8 @@
 from rest_framework import viewsets
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
-from .models import Product, Order, Category, ProductImage
-from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, ProductImageSerializer
+from .models import Product, Order, Category, ProductImage, ProductPriceHistory
+from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, ProductImageSerializer, ProductPriceHistorySerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -28,6 +29,14 @@ class ProductImageViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
+
+class ProductPriceHistoryView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ProductPriceHistorySerializer
+
+    def get_queryset(self):
+        product_id = self.kwargs.get('product_id')
+        return ProductPriceHistory.objects.filter(product_id=product_id).order_by('-start_date')
 
 class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
