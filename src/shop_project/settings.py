@@ -156,7 +156,7 @@ SIMPLE_JWT = {
 # media
 MEDIA_ROOT = os.path.join(config('MEDIA_ROOT', '/media'), 'django')
 # 媒体文件的访问路径
-MEDIA_URL = '/media/'
+MEDIA_URL = f'http://{os.getenv("HOST_NAME", "localhost")}/media/'
 
 LOGGING = {
     'version': 1,

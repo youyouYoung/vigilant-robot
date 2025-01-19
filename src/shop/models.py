@@ -13,7 +13,7 @@ def get_image_upload_to(instance, filename):
     else:
         type_name = instance.__class__.__name__
         instance_name = None
-    return f'{type_name}/images/{instance_name}/{filename}'
+    return f'{type_name}/images/{instance_name}/{filename}'.lower()
 
 def get_icon_upload_to(instance, filename):
     if isinstance(instance, ProductImage):
@@ -25,7 +25,7 @@ def get_icon_upload_to(instance, filename):
     else:
         type_name = instance.__class__.__name__
         instance_name = None
-    return f'{type_name}/icons/{instance_name}/{filename}'
+    return f'{type_name}/icons/{instance_name}/{filename}'.lower()
 
 class Category(models.Model):
     """
