@@ -27,15 +27,21 @@ class ProductImageViewSet(viewsets.ModelViewSet):
     商品图片View
     """
     permission_classes = [AllowAny]
-    queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
 
-class ProductPriceHistoryView(ListAPIView):
+    def get_queryset(self):
+        product_id = self.kwargs.get('product_pk', None)
+        if product_id:
+            return ProductImage.objects.filter(product_id=product_id)
+        return ProductImage.objects.all()
+
+class ProductPriceHistoryView(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = ProductPriceHistorySerializer
+    http_method_names = ['get', 'head']
 
     def get_queryset(self):
-        product_id = self.kwargs.get('product_id')
+        product_id = self.kwargs.get('product_pk')
         return ProductPriceHistory.objects.filter(product_id=product_id).order_by('-start_date')
 
 class OrderViewSet(viewsets.ModelViewSet):
