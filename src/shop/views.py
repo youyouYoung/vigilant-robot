@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
 from .models import Product, Order, Category, ProductImage, ProductPriceHistory
 from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, ProductImageSerializer, ProductPriceHistorySerializer
@@ -30,10 +29,16 @@ class ProductImageViewSet(viewsets.ModelViewSet):
     serializer_class = ProductImageSerializer
 
     def get_queryset(self):
-        product_id = self.kwargs.get('product_pk', None)
-        if product_id:
-            return ProductImage.objects.filter(product_id=product_id)
-        return ProductImage.objects.all()
+        product_pk = self.kwargs.get('product_pk', None)
+        return ProductImage.objects.filter(product_id=product_pk)
+
+    def perform_create(self, serializer):
+        product_pk = self.kwargs['product_pk']
+        serializer.save(product_id=product_pk)
+
+    def perform_update(self, serializer):
+        product_pk = self.kwargs['product_pk']
+        serializer.save(product_id=product_pk)
 
 class ProductPriceHistoryView(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
