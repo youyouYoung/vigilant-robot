@@ -5,6 +5,7 @@ from .serializers import ProductSerializer, OrderSerializer, CategorySerializer,
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
+from rest_framework.filters import OrderingFilter
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -17,17 +18,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
     filterset_class = ProductFilter
+    ordering_fields = ['id', 'brand', 'category', 'is_featured', 'is_active', 'on_sale']  # 允许按这些字段排序
+    ordering = ['id']  # 默认按 'price' 升序排序
 
     def get_queryset(self):
-        sort = self.request.query_params.get('sort', '-id')
         return Product.objects.prefetch_related(
             Prefetch(
                 'images',
                 queryset=ProductImage.objects.order_by('is_primary', '-id')
             )
-        ).order_by(sort)
+        )
 
 class ProductImageViewSet(viewsets.ModelViewSet):
     """
