@@ -20,6 +20,7 @@ services:
       - ./src:/app  # Mount only the src folder
       - ./wait-for-it.sh:/app/wait-for-it.sh  # Mount the wait-for-it.sh script
       - ${MEDIA_ROOT}:/media
+      - ${LOG_ROOT}:/logs
     depends_on:
       - db
     environment:
@@ -41,6 +42,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ${MEDIA_ROOT}:/media
+      - ${NGINX_LOG_ROOT}:/var/log/nginx
     ports:
       - "80:80"
     depends_on:

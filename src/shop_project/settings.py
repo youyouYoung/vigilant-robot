@@ -165,22 +165,44 @@ MEDIA_URL = f'http://{os.getenv("HOST_NAME", "localhost")}/media/'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+            'class': 'logging.StreamHandler',  # 输出到控制台
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',  # 输出到文件
+            'filename': os.path.join(config('LOG_ROOT', '/logs'), 'django.log'),  # 日志文件路径
+            'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'WARNING',  # Adjust this level as needed (e.g., INFO, WARNING, ERROR)
             'propagate': True,
         },
         'shop': {  # Replace with your app's name if using a custom logger
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'WARNING',
-            'propagate': True,
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['file'],  # 请求日志单独记录到文件
+            'level': 'ERROR',
+            'propagate': False,
         },
     },
 }
