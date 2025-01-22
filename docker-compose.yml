@@ -17,7 +17,7 @@ services:
     ports:
       - "8000:8000" # 默认端口为 8000
     volumes:
-      - ./src:/app  # Mount only the src folder
+      - ./shop_project:/app  # Mount only the shop_project folder
       - ./wait-for-it.sh:/app/wait-for-it.sh  # Mount the wait-for-it.sh script
       - ${MEDIA_ROOT}:/media
       - ${LOG_ROOT}:/logs
