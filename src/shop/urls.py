@@ -4,7 +4,7 @@ from .views import ProductViewSet, OrderViewSet, CategoryViewSet, ProductImageVi
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
-router.register(r'products', ProductViewSet)
+router.register(r'products', ProductViewSet, basename='products')
 router.register(r'orders', OrderViewSet)
 
 # 嵌套路由：/api/products/<int:product_id>/

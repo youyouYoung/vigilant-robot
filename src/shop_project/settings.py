@@ -87,6 +87,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'EXCEPTION_HANDLER': 'utils.exception_handler.custom_exception_handler',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',  # 保持过滤功能
+    ),
 }
 
 # Database

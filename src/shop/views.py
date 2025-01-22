@@ -2,6 +2,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from .models import Product, Order, Category, ProductImage, ProductPriceHistory
 from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, ProductImageSerializer, ProductPriceHistorySerializer
+from django.db.models import Prefetch
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import ProductFilter
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -11,15 +14,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    # # Optionally, you can customize the queryset or add filtering here
-    # def get_queryset(self):
-    #     # For example, filter only active categories
-    #     return Category.objects.filter(is_active=True)
-
 class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ProductFilter
+
+    def get_queryset(self):
+        sort = self.request.query_params.get('sort', '-id')
+        return Product.objects.prefetch_related(
+            Prefetch(
+                'images',
+                queryset=ProductImage.objects.order_by('is_primary', '-id')
+            )
+        ).order_by(sort)
 
 class ProductImageViewSet(viewsets.ModelViewSet):
     """
@@ -30,7 +38,7 @@ class ProductImageViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         product_pk = self.kwargs.get('product_pk', None)
-        return ProductImage.objects.filter(product_id=product_pk)
+        return ProductImage.objects.filter(product_id=product_pk).order_by('-id')
 
     def perform_create(self, serializer):
         product_pk = self.kwargs['product_pk']
