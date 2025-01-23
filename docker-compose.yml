@@ -43,6 +43,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ${MEDIA_ROOT}:/media
       - ${NGINX_LOG_ROOT}:/var/log/nginx
+      - ${STATIC_ROOT}:/media/static
     ports:
       - "80:80"
     depends_on:
