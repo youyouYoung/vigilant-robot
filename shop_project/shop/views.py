@@ -6,6 +6,7 @@ from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
 from rest_framework.filters import OrderingFilter
+from .permissions import AdminOnly
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -16,6 +17,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
+    # permission_classes = [AdminOnly]
     permission_classes = [AllowAny]
     serializer_class = ProductSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
