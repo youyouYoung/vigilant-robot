@@ -8,10 +8,54 @@ import json
 # Configure a logger for error handling
 logger = logging.getLogger(__name__)
 
+def get_request_body(request):
+    try:
+        if request.content_type.startswith("multipart/form-data"):
+            # 处理文件上传
+            body = {
+                "POST": dict(request.POST),
+                "FILES": {k: v.name for k, v in request.FILES.items()}
+            }
+        elif request.content_type == "application/x-www-form-urlencoded":
+            # 处理普通表单
+            body = dict(request.POST)
+        else:
+            # 处理 JSON 或普通文本
+            body = request.body.decode("utf-8")
+            try:
+                body = json.loads(body)  # 如果是 JSON，则解析
+            except json.JSONDecodeError:
+                pass  # 不是 JSON，保持原始内容
+
+        return json.dumps(body, ensure_ascii=False, indent=2)
+    except UnicodeDecodeError:
+        return "[无法解码为 UTF-8]"
+    except Exception as e:
+        return f"[解析 body 失败] 错误: {str(e)}"
+
+
 def custom_exception_handler(exc, context):
     # Call DRF's default exception handler first
     response = exception_handler(exc, context)
     request = context.get("request")
+
+    if request:
+        # 获取请求方法
+        method = request.method
+        # 获取请求路径
+        path = request.get_full_path()
+        # 获取请求头
+        headers = dict(request.headers)
+        body = get_request_body(request)
+        # 记录日志
+        log_data = {
+            "method": method,
+            "path": path,
+            "headers": headers,
+            "body": body,
+            "exception": str(exc),
+        }
+        logger.error(f"custom_exception_handler - Error: {str(exc)}, Request: {json.dumps(log_data, ensure_ascii=False)}, Context: {json.dumps(context)}")
 
     # If response is None, handle it as a server error
     if response is None:
@@ -32,28 +76,6 @@ def custom_exception_handler(exc, context):
 
     # Handle ValidationError exceptions
     if isinstance(exc, ValidationError):
-        try:
-            body = request.body.decode("utf-8")
-        except Exception:
-            body = "[无法解析]"
-
-        if request:
-            # 获取请求方法
-            method = request.method
-            # 获取请求路径
-            path = request.get_full_path()
-            # 获取请求头
-            headers = dict(request.headers)
-            # 记录日志
-            log_data = {
-                "method": method,
-                "path": path,
-                "headers": headers,
-                "body": body,
-                "exception": str(exc),
-            }
-            logger.error(f"ValidationError: {json.dumps(log_data, ensure_ascii=False)}")
-
         return JsonResponse({
             "error": "Validation Error",
             "message": exc.default_detail,
