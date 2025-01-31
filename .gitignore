@@ -163,3 +163,4 @@ cython_debug/
 
 postgres_backup
 frontend
+migraions
