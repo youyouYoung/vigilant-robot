@@ -194,16 +194,6 @@ LOGGING = {
             'handlers': ['console', 'file'],
             'level': 'WARNING',  # Adjust this level as needed (e.g., INFO, WARNING, ERROR)
             'propagate': True,
-        },
-        'shop': {  # Replace with your app's name if using a custom logger
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['file'],  # 请求日志单独记录到文件
-            'level': 'ERROR',
-            'propagate': False,
-        },
+        }
     },
 }
