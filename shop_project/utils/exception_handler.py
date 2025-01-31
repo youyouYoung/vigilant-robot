@@ -55,7 +55,7 @@ def custom_exception_handler(exc, context):
             "body": body,
             "exception": str(exc),
         }
-        logger.error(f"custom_exception_handler - Error: {str(exc)}, Request: {json.dumps(log_data, ensure_ascii=False)}, Context: {json.dumps(context)}")
+        logger.error(f"custom_exception_handler - Error: {str(exc)}, Request: {json.dumps(log_data, ensure_ascii=False)}, Context: {str(context)}")
 
     # If response is None, handle it as a server error
     if response is None:
