@@ -1,0 +1,6 @@
+google login tutorial: https://medium.com/@michal.drozdze/django-rest-framework-jwt-authentication-social-login-login-with-google-8911332f1008
+
+Before production:
+- Create a production project in Google Cloud
+- Publish Google app in OAuth consent screen: https://console.cloud.google.com/apis/credentials/consent?authuser=2&inv=1&invt=Aboc7g&project=shopping-dev-449701, including:
+    - icon
