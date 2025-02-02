@@ -160,8 +160,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # auth
 GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/auth/google/callback/')
-GOOGLE_OAUTH2_KEY=os.getenv('GOOGLE_OAUTH2_KEY', '684063303955-vda78hif4j9ffrohlujpt3q2o3hqdmkt.apps.googleusercontent.com')
-GOOGLE_OAUTH2_SECRET=os.getenv('GOOGLE_OAUTH2_SECRET', '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')
+GOOGLE_OAUTH2_KEY=os.getenv('GOOGLE_OAUTH2_KEY')
+GOOGLE_OAUTH2_SECRET=os.getenv('GOOGLE_OAUTH2_SECRET')
 
 # cors domains
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:8080').split(",")
