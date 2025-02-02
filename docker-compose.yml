@@ -34,6 +34,9 @@ services:
       GOOGLE_OAUTH2_KEY: ${GOOGLE_OAUTH2_KEY}
       GOOGLE_OAUTH2_SECRET: ${GOOGLE_OAUTH2_SECRET}
       GOOGLE_OAUTH2_CALLBACK_URL: ${GOOGLE_OAUTH2_CALLBACK_URL}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      SERVER_BASE_URL: http://web:8000
     command: >
       sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
       python manage.py migrate &&

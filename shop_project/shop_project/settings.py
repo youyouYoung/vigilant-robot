@@ -158,10 +158,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# auth
+# auth todo remove sensitive data
 GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/auth/google/callback/')
 GOOGLE_OAUTH2_KEY=os.getenv('GOOGLE_OAUTH2_KEY')
 GOOGLE_OAUTH2_SECRET=os.getenv('GOOGLE_OAUTH2_SECRET')
+SERVER_BASE_URL=os.getenv('SERVER_BASE_URL', 'http://localhost:8000')
 
 # cors domains
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:8080').split(",")
@@ -278,11 +279,11 @@ AUTHENTICATION_BACKENDS = [
 # django.contrib.sites
 SITE_ID = 1
 
-# Django SMTP
+# Django SMTP todo remove sensitive data
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "youyou.young.mine@gmail.com" # email sending address
-EMAIL_HOST_PASSWORD = "waws tgkr zuow pjtf"
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 

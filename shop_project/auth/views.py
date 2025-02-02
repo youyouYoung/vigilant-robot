@@ -11,12 +11,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render
 from django.views import View
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+
+class CustomOAuth2Client(OAuth2Client):
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("scope_delimiter", None)  # 移除可能重复的 scope_delimiter 参数
+        super().__init__(*args, **kwargs)
 
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
     callback_url = settings.GOOGLE_OAUTH2_CALLBACK_URL
-    client_class = OAuth2Client
+    client_class = CustomOAuth2Client
 
 
 class GoogleLoginCallback(APIView):
@@ -34,7 +40,7 @@ class GoogleLoginCallback(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         # Remember to replace the localhost:8000 with the actual domain name before deployment
-        token_endpoint_url = urljoin("http://localhost:8000", reverse("google_login"))
+        token_endpoint_url = urljoin(settings.SERVER_BASE_URL, reverse("google_login"))
         response = requests.post(url=token_endpoint_url, data={"code": code})
 
         return Response(response.json(), status=status.HTTP_200_OK)
