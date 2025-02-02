@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 def get_image_upload_to(instance, filename):
     if isinstance(instance, ProductImage):
@@ -53,7 +54,7 @@ class Product(models.Model):
     商品
     """
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.CharField(max_length=100, default='xyz')
     current_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
@@ -125,9 +126,13 @@ class CustomUser(AbstractUser):
         ('admin', 'Admin'),
     )
 
+    email = models.EmailField(_("email address"), unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     is_temporary = models.BooleanField(default=False) # 快速购买用户的标志
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.username

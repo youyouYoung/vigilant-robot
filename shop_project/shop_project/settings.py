@@ -40,11 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'shop',
     'corsheaders',
     'django_cleanup.apps.CleanupConfig',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'shop_project.urls'
@@ -149,13 +158,26 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# auth
+GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/auth/google/callback/')
+GOOGLE_OAUTH2_KEY=os.getenv('GOOGLE_OAUTH2_KEY', '684063303955-vda78hif4j9ffrohlujpt3q2o3hqdmkt.apps.googleusercontent.com')
+GOOGLE_OAUTH2_SECRET=os.getenv('GOOGLE_OAUTH2_SECRET', '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')
+
 # cors domains
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:8080').split(",")
 
-# token lifetime
+# djangorestframework-simplejwt settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Example: 5 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Example: 7 days
+    'ROTATE_REFRESH_TOKENS': True,  # Get a new refresh token when using refresh
+    'BLACKLIST_AFTER_ROTATION': True,  # Blacklist old refresh tokens after rotation
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Use "Bearer <token>"
+}
+
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_HTTPONLY": False,
 }
 
 # media
@@ -197,3 +219,70 @@ LOGGING = {
         }
     },
 }
+
+# django-allauth
+ACCOUNT_AUTHENTICATION_METHOD = "email"  # Use email instead of username
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "mandatory" # Require email confirmation
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True  # No need to sent POST request to confirmation link
+LOGIN_URL = "/admin"  # Path, users will be redirected to after email verification
+# # The URL to redirect to after a successful email confirmation, in case no user is logged in.
+# ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = os.environ.get(
+#     "EMAIL_CONFIRM_REDIRECT_URL", "https://myapp.com/login"
+# )
+# # The URL to redirect to after a successful email confirmation, in case of an authenticated user.
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = os.environ.get(
+#     "EMAIL_CONFIRM_REDIRECT_URL", "https://myapp.com/login"
+# )
+
+# allauth.socialaccount
+# Authenticate if local account with this email address already exists
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+# Connect local account and social account if local account with that email address already exists
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APPS": [
+            {
+                "client_id": GOOGLE_OAUTH2_KEY,
+                "secret": GOOGLE_OAUTH2_SECRET,
+                "key": "",
+            },
+        ],
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    }
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# LOGIN_REDIRECT_URL = '/callback/'
+#
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': ['profile', 'email'],
+#         'AUTH_PARAMS': {'access_type': 'online'},
+#         'OAUTH_PKCE_ENABLED': True,
+#         'FETCH_USERINFO': True,
+#     }
+# }
+#
+# SOCIALACCOUNT_STORE_TOKEN = True
+
+# django.contrib.sites
+SITE_ID = 1
+
+# Django SMTP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "youyou.young.mine@gmail.com" # email sending address
+EMAIL_HOST_PASSWORD = "waws tgkr zuow pjtf"
+
