@@ -21,7 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
     product serializer
     todo If you want to fetch the latest price history or history for a specific time range, you can use Django ORM queries on ProductPriceHistory.
     """
-    images = ProductImageSerializer(many=True)
+    images = ProductImageSerializer(many=True, required=False)
     class Meta:
         model = Product
         fields = '__all__'
