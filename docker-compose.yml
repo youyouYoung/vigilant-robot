@@ -19,8 +19,9 @@ services:
     volumes:
       - ./shop_project:/app  # Mount only the shop_project folder
       - ./wait-for-it.sh:/app/wait-for-it.sh  # Mount the wait-for-it.sh script
-      - ${MEDIA_ROOT}:/media
-      - ${LOG_ROOT}:/logs
+      - static_volume:/app/static-files  # Mount static files
+      - media_volume:/app/media  # Mount media files
+      - ${DJANGO_LOG_ROOT}:/app/logs
     depends_on:
       - db
     environment:
@@ -37,8 +38,10 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
       SERVER_BASE_URL: http://web:8000
+      IS_DEBUG: ${IS_DEBUG}
     command: >
-      sh -c "/app/wait-for-it.sh db:5432 -- python manage.py makemigrations && 
+      sh -c "/app/wait-for-it.sh db:5432 -- python manage.py collectstatic --noinput && 
+      python manage.py makemigrations && 
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
 
@@ -47,9 +50,9 @@ services:
     container_name: nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ${MEDIA_ROOT}:/media
       - ${NGINX_LOG_ROOT}:/var/log/nginx
-      - ${STATIC_ROOT}:/media/static
+      - static_volume:/static  # Serve static files
+      - media_volume:/media
     ports:
       - "80:80"
     depends_on:
@@ -57,3 +60,6 @@ services:
 
 volumes:
   postgres_data:
+  static_volume:
+  media_volume:
+  log_volume:

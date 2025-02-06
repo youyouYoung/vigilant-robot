@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-tq$7sd3e)#-0#*&g2)9fjkjew%&x(4(5&dvyv694y2#^g939ry'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('IS_DEBUG', False)
+DEBUG = os.getenv('IS_DEBUG', False)
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
@@ -152,6 +151,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static-files/'
+
+# media files
+
+MEDIA_URL = 'media/'  # 媒体文件的访问路径
+MEDIA_ROOT = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -181,11 +186,6 @@ REST_AUTH = {
     "JWT_AUTH_HTTPONLY": False,
 }
 
-# media
-MEDIA_ROOT = os.path.join(config('MEDIA_ROOT', '/media'), 'django')
-# 媒体文件的访问路径
-MEDIA_URL = f'http://{os.getenv("HOST_NAME", "localhost")}/media/'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -208,7 +208,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',  # 输出到文件
-            'filename': os.path.join(config('LOG_ROOT', '/logs'), 'django.log'),  # 日志文件路径
+            'filename': 'logs/django.log',  # 日志文件路径
             'formatter': 'verbose',
         },
     },
