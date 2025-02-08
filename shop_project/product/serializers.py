@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Order, Category, ProductImage, ProductPriceHistory
+from .models import Product, Category, ProductImage, ProductPriceHistory
 from django.utils.timezone import now
 from django.db import transaction
 
@@ -91,8 +91,3 @@ class ProductPriceHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductPriceHistory
         fields = ['id', 'price', 'start_date', 'end_date']
-
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = '__all__'
