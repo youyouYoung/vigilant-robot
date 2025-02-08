@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'shop',
+    'user',
     'corsheaders',
     'django_cleanup.apps.CleanupConfig',
     'dj_rest_auth',
@@ -133,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'shop.CustomUser'
+AUTH_USER_MODEL = 'user.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -164,7 +165,7 @@ MEDIA_ROOT = 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # auth todo remove sensitive data
-GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/auth/google/callback/')
+GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/user/google/callback/')
 GOOGLE_OAUTH2_KEY=os.getenv('GOOGLE_OAUTH2_KEY')
 GOOGLE_OAUTH2_SECRET=os.getenv('GOOGLE_OAUTH2_SECRET')
 SERVER_BASE_URL=os.getenv('SERVER_BASE_URL', 'http://localhost:8000')
@@ -279,7 +280,7 @@ AUTHENTICATION_BACKENDS = [
 # django.contrib.sites
 SITE_ID = 1
 
-# Django SMTP todo remove sensitive data
+# Django SMTP
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
