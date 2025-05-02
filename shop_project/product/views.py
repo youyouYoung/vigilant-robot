@@ -1,12 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from .models import Product, Order, Category, ProductImage, ProductPriceHistory
-from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, ProductImageSerializer, ProductPriceHistorySerializer
+from .models import Product, Category, ProductImage, ProductPriceHistory
+from .serializers import ProductSerializer, CategorySerializer, ProductImageSerializer, ProductPriceHistorySerializer
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
 from rest_framework.filters import OrderingFilter
-from .permissions import AdminOnly
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -60,8 +60,3 @@ class ProductPriceHistoryView(viewsets.ModelViewSet):
     def get_queryset(self):
         product_id = self.kwargs.get('product_pk')
         return ProductPriceHistory.objects.filter(product_id=product_id).order_by('-start_date')
-
-class OrderViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer

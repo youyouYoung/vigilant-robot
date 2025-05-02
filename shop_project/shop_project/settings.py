@@ -33,6 +33,8 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split("
 # Application definition
 
 INSTALLED_APPS = [
+    # django
+    'django_cleanup.apps.CleanupConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,12 +42,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    
+    # rest_framework
     'rest_framework',
-    'rest_framework_simplejwt',
     'rest_framework.authtoken',
-    'shop',
+    'rest_framework_simplejwt',
+    
+    # apps
+    'user',
+    'product',
+    'order',
     'corsheaders',
-    'django_cleanup.apps.CleanupConfig',
+    
+    # third-party
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'allauth',
@@ -133,14 +142,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'shop.CustomUser'
+AUTH_USER_MODEL = 'user.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'GMT-6'
 
 USE_I18N = True
 
@@ -164,15 +173,18 @@ MEDIA_ROOT = 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # auth todo remove sensitive data
-GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/auth/google/callback/')
+
+GOOGLE_OAUTH2_CALLBACK_URL=os.getenv('GOOGLE_OAUTH2_CALLBACK_URL', 'http://localhost:8000/user/google/callback/')
 GOOGLE_OAUTH2_KEY=os.getenv('GOOGLE_OAUTH2_KEY')
 GOOGLE_OAUTH2_SECRET=os.getenv('GOOGLE_OAUTH2_SECRET')
 SERVER_BASE_URL=os.getenv('SERVER_BASE_URL', 'http://localhost:8000')
 
 # cors domains
+
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:8080').split(",")
 
 # djangorestframework-simplejwt settings
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Example: 5 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Example: 7 days
@@ -263,23 +275,10 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# LOGIN_REDIRECT_URL = '/callback/'
-#
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'SCOPE': ['profile', 'email'],
-#         'AUTH_PARAMS': {'access_type': 'online'},
-#         'OAUTH_PKCE_ENABLED': True,
-#         'FETCH_USERINFO': True,
-#     }
-# }
-#
-# SOCIALACCOUNT_STORE_TOKEN = True
-
 # django.contrib.sites
 SITE_ID = 1
 
-# Django SMTP todo remove sensitive data
+# Django SMTP
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587

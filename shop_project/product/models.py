@@ -1,9 +1,7 @@
 from decimal import Decimal
 from django.db import models
 from django.core.validators import MinValueValidator
-from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 
 def get_image_upload_to(instance, filename):
     if isinstance(instance, ProductImage):
@@ -116,64 +114,3 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
-
-class CustomUser(AbstractUser):
-    """
-    自定义用户模型，继承自 AbstractUser
-    """
-    ROLE_CHOICES = (
-        ('customer', 'Customer'),
-        ('admin', 'Admin'),
-    )
-
-    email = models.EmailField(_("email address"), unique=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    is_temporary = models.BooleanField(default=False) # 快速购买用户的标志
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
-    def __str__(self):
-        return self.username
-
-class Address(models.Model):
-    """
-    用户地址，目前要求billing地址只能创建一个，shipping地址可以创建多个
-    """
-    ADDRESS_TYPE_CHOICES = (
-        ('billing', 'Billing'),
-        ('shipping', 'Shipping'),
-    )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='addresses')
-    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE_CHOICES)
-    address_line_1 = models.CharField(max_length=255)
-    address_line_2 = models.CharField(max_length=255, blank=True, null=True)
-    city = models.CharField(max_length=100)
-    province = models.CharField(max_length=100)  # e.g., Ontario, Manitoba
-    postal_code = models.CharField(max_length=10)
-    country = models.CharField(max_length=100, default='Canada')
-
-    def __str__(self):
-        return f'{self.address_type} - {self.address_line_1}, {self.city}, {self.country}'
-
-class CustomerView(models.Model):
-    """
-    用户评价表
-    """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")  # 与Product关联
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 与CustomUser模型关联
-    rating = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)])  # 评分（1-5）
-    comment = models.TextField()  # 评论内容
-    created_at = models.DateTimeField(auto_now_add=True)  # 创建时间
-    updated_at = models.DateTimeField(auto_now=True)  # 最后更新时间
-    is_approved = models.BooleanField(default=False)  # 是否已通过审核
-
-    def __str__(self):
-        return f'Review by {self.user.username} on {self.product.name}'
-
-class Order(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
