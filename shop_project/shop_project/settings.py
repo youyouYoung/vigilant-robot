@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-tq$7sd3e)#-0#*&g2)9fjkjew%&x(4(5&dvyv694y2#^g939ry'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('IS_DEBUG', False)
+# DEBUG = os.getenv('IS_DEBUG', False)
+DEBUG = True  # todo remove in production
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
@@ -149,7 +150,7 @@ AUTH_USER_MODEL = 'user.CustomUser'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'GMT-6'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
